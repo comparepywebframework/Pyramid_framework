@@ -1,20 +1,8 @@
 version: "3"
 services:
-  mysql_pyramid:
-    container_name: "mysql_pyramid"
-    image: mysql:latest
-    ports:
-      - "3309:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: "root"
-      MYSQL_DATABASE: "pyramid_framework"
-    command: --default-authentication-plugin=mysql_native_password
   app:
     build: . 
     ports:
       - "6543:6543"
-    command: bash -c "./wait-for-it.sh -t 0 mysql_pyramid:3306 -- alembic -c production.ini upgrade head && pserve production.ini"
-    links:
-      - mysql_pyramid
-    depends_on:
-      - mysql_pyramid
+    command: bash -c "alembic -c production.ini upgrade head && pserve production.ini"
+
